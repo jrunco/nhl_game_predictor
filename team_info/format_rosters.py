@@ -112,13 +112,32 @@ for i in range(len(df_players)):
 df_players_sj_skaters = df_players[df_players["team"] == "SJS"]
 
 
+
+
+## different way to get skater stats
+# Get basic skater stats
+skater_stats_test = client.stats.skater_stats_summary(
+    start_season="20252026", 
+    end_season="20252026", 
+    #franchise_id="SJS", # incorrect franchise ID
+    limit=100000
+) # can add franchise_id to specifically pick a team
+df_skater_stats = pd.DataFrame(skater_stats_test) # this seems to only output 100 rows... this is incorrect
+
+
+
+
+
+
+
 ### get goalie stats
 # Get basic goalie stats
 goalie_stats_basic = client.stats.goalie_stats_summary(
     start_season="20252026", 
     end_season="20252026",
+    #franchise_id="SJS", # incorrect franchise ID
     limit=10000
-)
+) # can add franchise_id to specifically pick a team
 df_goalie_stats_basic = pd.DataFrame(goalie_stats_basic)
 
 # Get advanced goalie stats
@@ -141,10 +160,17 @@ df_goalies = pd.merge(df_goalie_stats_basic, df_goalie_stats_advanced, on="playe
 
 
 
-# TODO: make the above code functions for better practice (prioirty 1)
+# TODO: make the above code functions for better practice (prioirty 1) --> write a yml file that gets player,
+# goalie, and team stats for two teams for the purposes of predicting outcome of a game
+
 # TODO: split the data frame up into 32 dfs (1 for each team), make these into a library (maybe) (priority 1)
-# TODO: grab dfs for goalies, merge them into df_players. There should be different functions for grabbing skater and goalie stats (priority 1)
+# connect this with #1
+
+# TODO: grab dfs for goalies, merge them into df_players. 
+# There should be different functions for grabbing skater and goalie stats (priority 1)
+
 # TODO: add more advanced stats for more complex model (priority 2)
+
 # TODO: consider changing NaNs in player stats to 0's if that makes training the models fail (priority 3)
 
 
@@ -155,3 +181,5 @@ df_goalies = pd.merge(df_goalie_stats_basic, df_goalie_stats_advanced, on="playe
 
 ### using the modules notes
 # help(client.stats.goalie_stats_summary) gives the options for getting goalie stats
+# help(client.stats.skater_stats_summary)
+# help(client.stats.skater_stats_with_query_context)
